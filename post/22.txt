@@ -25,5 +25,3 @@ trojan://eab94cc0-7cc2-4039-b948-c04cec3162da@1-5.yoked1.repl.co:443?security=tl
 vmess://ew0KICAidiI6ICIyIiwNCiAgInBzIjogInJlcGxpdF95b2tlZDEtNl815YWx5a2YIiwNCiAgImFkZCI6ICJ2aXNhLmNvbSIsDQogICJwb3J0IjogIjgwIiwNCiAgImlkIjogImI5MzNlMGY1LTcyOTUtNDAwYS05ZWUwLWZhNjA0OGMwMTVhZiIsDQogICJhaWQiOiAiMCIsDQogICJzY3kiOiAiYXV0byIsDQogICJuZXQiOiAid3MiLA0KICAidHlwZSI6ICJub25lIiwNCiAgImhvc3QiOiAiNi53ZWlndWFuZy53b3JrZXJzLmRldiIsDQogICJwYXRoIjogIi9iOTMzZTBmNS03Mjk1LTQwMGEtOWVlMC1mYTYwNDhjMDE1YWYtdm0iLA0KICAidGxzIjogIiIsDQogICJzbmkiOiAiIiwNCiAgImFscG4iOiAiIg0KfQ==
 vless://b933e0f5-7295-400a-9ee0-fa6048c015af@1-6.yoked1.repl.co:443?encryption=none&security=tls&type=ws&host=1-6.yoked1.repl.co&path=%2Fb933e0f5-7295-400a-9ee0-fa6048c015af-vl#replit_yoked1-6_5%E5%85%B1%E5%AD%98
 trojan://b933e0f5-7295-400a-9ee0-fa6048c015af@1-6.yoked1.repl.co:443?security=tls&type=ws&host=1-6.yoked1.repl.co&path=%2Fb933e0f5-7295-400a-9ee0-fa6048c015af-tr#replit_yoked1-6_5%E5%85%B1%E5%AD%98
-
-
