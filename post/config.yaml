@@ -7,7 +7,7 @@ proxy-providers:
     interval: 86400
     health-check:
       enable: true
-      url: https://www.gstatic.com/generate_204
+      url: https://www.google.com/generate_204
       interval: 300
     proxy: 直连
 
@@ -26,10 +26,10 @@ bind-address: "*"
 ipv6: true
 unified-delay: true
 tcp-concurrent: true
-log-level: warning
+log-level: info
 find-process-mode: 'off'
 # interface-name: en0
-global-client-fingerprint: chrome
+#global-client-fingerprint: chrome
 keep-alive-idle: 600
 keep-alive-interval: 15
 disable-keep-alive: false
@@ -43,10 +43,10 @@ secret: "20000210s"
 external-ui: "/etc/nikki/run/ui"
 #external-ui-name: zashboard
 #external-ui-url: "https://github.com/Zephyruso/zashboard/archive/refs/heads/gh-pages.zip"
-#external-ui-name: metacubexd
-#external-ui-url: "https://github.com/MetaCubeX/metacubexd/archive/refs/heads/gh-pages.zip"
-external-ui-name: yacdmeta
-external-ui-url: "https://github.com/MetaCubeX/Yacd-meta/archive/refs/heads/gh-pages.zip"
+external-ui-name: metacubexd
+external-ui-url: "https://github.com/MetaCubeX/metacubexd/archive/refs/heads/gh-pages.zip"
+#external-ui-name: yacdmeta
+#external-ui-url: "https://github.com/MetaCubeX/Yacd-meta/archive/refs/heads/gh-pages.zip"
 #external-ui-name: razordmeta
 #external-ui-url: "https://github.com/MetaCubeX/Razord-meta/archive/refs/heads/gh-pages.zip"
 
@@ -58,11 +58,11 @@ sniffer:
   enable: true
   force-dns-mapping: true
   parse-pure-ip: true
-#  override-destination: true
+  override-destination: true
   sniff:
     HTTP:
       ports: [80, 8080-8880]
-      override-destination: true
+#      override-destination: true
     TLS:
       ports: [443, 8443]
     QUIC:
@@ -84,22 +84,25 @@ tun:
   enable: true
   # system/gvisor/mixed
   stack: mixed
-  dns-hijack: ["any:53", "tcp://any:53"]
+#  dns-hijack: ["any:53", "tcp://any:53"]
   #使用nikki，混入全部不修改的情况，开启接口指定为nikki
   #device: nikki
   #使用仅内核自行修改下面三项为true
   auto-route: false
   auto-redirect: false
   auto-detect-interface: false
+
 # DNS模块
 dns:
   enable: true
   cache-algorithm: arc
   listen: 0.0.0.0:1053
   ipv6: true
+  #prefer-ipv6: true
   respect-rules: true
   enhanced-mode: fake-ip
   fake-ip-range: 28.0.0.1/8
+  fake-ip-range6: fdfe:dcba:9876::1/64
   fake-ip-filter-mode: blacklist
   default-nameserver:
     - https://223.5.5.5/dns-query
@@ -110,13 +113,15 @@ dns:
     - https://dns.alidns.com/dns-query
     - https://doh.pub/dns-query
   nameserver:
-    - https://8.8.8.8/dns-query#RULES&ecs=223.5.5.0/24
+    - https://223.5.5.5/dns-query#RULES&ecs=202.101.226.0/24
+#    - 10.10.10.2
+#    - 10.10.10.5
 #,cn_domain
   fake-ip-filter:
-    - "rule-set:private_domain,zhilian"
+    - "rule-set:private_domain,zhilian,fakeipfilter"
     - "+.msftconnecttest.com"
     - "+.msftncsi.com"
-    - "time.*.com"
+    -  "+.github.com"
     - "rule-set:fakeipfilter_domain"
 #  default-nameserver:
 #    - 223.5.5.5
@@ -135,16 +140,16 @@ dns:
 #    - 10.10.10.5
 #    - 223.5.5.5
 #    - 119.29.29.29
-  use-system-hosts: true
+#  use-system-hosts: true
   prefer-h3: false
-  use-hosts: true
+#  use-hosts: true
 
  
 # 出站策略
 # 注意锚点必须放在引用的上方，可以集中把锚点全部放yaml的顶部。
-pr: &pr {type: select, proxies: [🚀 默认代理, ♻️ 6自用优选, ♻️ 4自用优选, 📶 官方优选, ♻️ 香港自动, ♻️ 日本自动, ♻️ 狮城自动, ♻️ 美国自动, ♻️ 台湾自动, ♻️ 韩国自动, ♻️ 自动选择, 🌐 全部节点, 直连]}
+pr: &pr {type: select, proxies: [🚀 默认代理, ♻️ 自动选择, ♻️ 自用手动, ♻️ 6自用优选, 📶 官方优选, ♻️ 香港自动, ♻️ 日本自动, ♻️ 狮城自动, ♻️ 美国自动, ♻️ 台湾自动, ♻️ 韩国自动, 🌐 全部节点, 直连]}
 proxy-groups:
-  - {name: 🚀 默认代理, type: select, proxies: [♻️ 6自用优选, ♻️ 4自用优选, 📶 官方优选, ♻️ 香港自动, ♻️ 日本自动, ♻️ 狮城自动, ♻️ 美国自动, ♻️ 台湾自动, ♻️ 韩国自动, ♻️ 自动选择, 🌐 全部节点, 直连]}
+  - {name: 🚀 默认代理, type: select, proxies: [♻️ 自动选择, ♻️ 自用手动, ♻️ 6自用优选, 📶 官方优选, ♻️ 香港自动, ♻️ 日本自动, ♻️ 狮城自动, ♻️ 美国自动, ♻️ 台湾自动, ♻️ 韩国自动, 🌐 全部节点]}
   - {name: 📹 YouTube, <<: *pr}
   - {name: 🍀 Google, <<: *pr}
   - {name: 🤖 ChatGPT, <<: *pr}
@@ -163,8 +168,11 @@ proxy-groups:
 #  - {name: 🇹🇼 台湾节点, type: select, include-all: true, filter: "台|新北|彰化|TW|Taiwan|TPE|KHH"}
 #  - {name: 🇰🇷 韩国节点, type: select, include-all: true, filter: "KR|Korea|KOR|Seoul|首尔|韩|韓|ICN"}
 #  - {name: 🇸🇬 狮城节点, type: select, include-all: true, filter: "新加坡|坡|狮城|SG|Singapore|SIN"}  strategy: round-robin,
-  - {name: ♻️ 6自用优选, type: load-balance, url: http://www.gstatic.com/generate_204, tolerance: 20, interval: 30, include-all: true, filter: "6自用"}
-  - {name: ♻️ 4自用优选, type: load-balance, url: http://www.gstatic.com/generate_204, tolerance: 50, interval: 30, include-all: true, filter: "4自用"}
+#  - {name: ♻️ 自动选择, type: url-test, url: https://www.google.com/generate_204, include-all: true, tolerance: 20, interval: 300, filter: "^((?!(直连)).)*$"}
+  - {name: ♻️ 自动选择, type: url-test, url: https://www.google.com/generate_204,  proxies: [♻️ 自用手动, ♻️ 6自用优选, 📶 官方优选, ♻️ 香港自动, ♻️ 日本自动, ♻️ 狮城自动, ♻️ 美国自动, ♻️ 台湾自动, ♻️ 韩国自动, 🌐 全部节点]}
+  - {name: ♻️ 自用手动, type: select, include-all: true, filter: "自用手动"}
+  - {name: ♻️ 6自用优选, type: load-balance, url: https://www.google.com/generate_204, tolerance: 20, interval: 300, include-all: true, filter: "6自用"}
+#  - {name: ♻️ 4自用优选, type: load-balance, url: https://www.google.com/generate_204, tolerance: 50, interval: 300, include-all: true, filter: "4自用"}
 #  - {name: 🇯🇵 日本节点, type: select, include-all: true, filter: "日本|川日|东京|大阪|泉日|埼玉|沪日|深日|[^-]日|JP|Japan|Tokyo|NRT|KIX"}
 #  - {name: 🇺🇲 美国节点, type: select, include-all: true, filter: "美|波特兰|达拉斯|俄勒冈|凤凰城|费利蒙|硅谷|拉斯维加斯|洛杉矶|圣何塞|圣克拉拉|西雅图|芝加哥|US|United States|ATL|BUF|DFW|EWR|IAD|LAX|MCI|MIA|ORD|PHX|PDX|SEA|SJC"}
 #  - {name: 🔯 香港故转, type: fallback, include-all: true, tolerance: 20, interval: 300, filter: "港|澳门|HK|hk|Hong Kong|HongKong|hongkong|MO|HKG|MFM"}
@@ -173,14 +181,13 @@ proxy-groups:
 #  - {name: 🔯 韩国故转, type: fallback, include-all: true, tolerance: 20, interval: 300, filter: "KR|Korea|KOR|Seoul|首尔|韩|韓|ICN" }
 #  - {name: 🔯 狮城故转, type: fallback, include-all: true, tolerance: 20, interval: 300, filter: "新加坡|坡|狮城|SG|Singapore|SIN" }
 #  - {name: 🔯 美国故转, type: fallback, include-all: true, tolerance: 20, interval: 300, filter: "美|波特兰|达拉斯|俄勒冈|凤凰城|费利蒙|硅谷|拉斯维加斯|洛杉矶|圣何塞|圣克拉拉|西雅图|芝加哥|US|United States|ATL|BUF|DFW|EWR|IAD|LAX|MCI|MIA|ORD|PHX|PDX|SEA|SJC" }
-  - {name: 📶 官方优选, type: url-test, url: http://www.gstatic.com/generate_204, include-all: true, tolerance: 20, interval: 30, filter: "官方|防|电信|移动|联通|CT|CU|CM|CF|t.me"}
-  - {name: ♻️ 香港自动, type: url-test, url: http://www.gstatic.com/generate_204, include-all: true, tolerance: 20, interval: 30, filter: "港|澳门|HK|hk|Hong Kong|HongKong|hongkong|MO|HKG|MFM"}
-  - {name: ♻️ 台湾自动, type: url-test, url: http://www.gstatic.com/generate_204, include-all: true, tolerance: 20, interval: 30, filter: "台|新北|彰化|TW|Taiwan|TPE|KHH"}
-  - {name: ♻️ 日本自动, type: url-test, url: http://www.gstatic.com/generate_204, include-all: true, tolerance: 20, interval: 30, filter: "日本|川日|东京|大阪|泉日|埼玉|沪日|深日|[^-]日|JP|Japan|Tokyo|NRT|KIX" }
-  - {name: ♻️ 韩国自动, type: url-test, url: http://www.gstatic.com/generate_204, include-all: true, tolerance: 20, interval: 30, filter: "KR|Korea|KOR|Seoul|首尔|韩|韓|ICN"}
-  - {name: ♻️ 狮城自动, type: url-test, url: http://www.gstatic.com/generate_204, include-all: true, tolerance: 20, interval: 30, filter: "新加坡|坡|狮城|SG|Singapore|SIN"}
-  - {name: ♻️ 美国自动, type: url-test, url: http://www.gstatic.com/generate_204, include-all: true, tolerance: 20, interval: 30, filter: "美|波特兰|达拉斯|俄勒冈|凤凰城|费利蒙|硅谷|拉斯维加斯|洛杉矶|圣何塞|圣克拉拉|西雅图|芝加哥|US|United States|ATL|BUF|DFW|EWR|IAD|LAX|MCI|MIA|ORD|PHX|PDX|SEA|SJC"}
-  - {name: ♻️ 自动选择, type: url-test, url: http://www.gstatic.com/generate_204, include-all: true, tolerance: 20, interval: 30, filter: "^((?!(直连)).)*$"}
+  - {name: 📶 官方优选, type: url-test, url: https://www.google.com/generate_204, include-all: true, tolerance: 20, interval: 300, filter: "官方|防|电信|移动|联通|CT|CU|CM|CF|t.me"}
+  - {name: ♻️ 香港自动, type: url-test, url: https://www.google.com/generate_204, include-all: true, tolerance: 20, interval: 300, filter: "港|澳门|HK|hk|Hong Kong|HongKong|hongkong|MO|HKG|MFM"}
+  - {name: ♻️ 台湾自动, type: url-test, url: https://www.google.com/generate_204, include-all: true, tolerance: 20, interval: 300, filter: "台|新北|彰化|TW|Taiwan|TPE|KHH"}
+  - {name: ♻️ 日本自动, type: url-test, url: https://www.google.com/generate_204, include-all: true, tolerance: 20, interval: 300, filter: "日本|川日|东京|大阪|泉日|埼玉|沪日|深日|[^-]日|JP|Japan|Tokyo|NRT|KIX" }
+  - {name: ♻️ 韩国自动, type: url-test, url: https://www.google.com/generate_204, include-all: true, tolerance: 20, interval: 300, filter: "KR|Korea|KOR|Seoul|首尔|韩|韓|ICN"}
+  - {name: ♻️ 狮城自动, type: url-test, url: https://www.google.com/generate_204, include-all: true, tolerance: 20, interval: 300, filter: "新加坡|坡|狮城|SG|Singapore|SIN"}
+  - {name: ♻️ 美国自动, type: url-test, url: https://www.google.com/generate_204, include-all: true, tolerance: 20, interval: 300, filter: "美|波特兰|达拉斯|俄勒冈|凤凰城|费利蒙|硅谷|拉斯维加斯|洛杉矶|圣何塞|圣克拉拉|西雅图|芝加哥|US|United States|ATL|BUF|DFW|EWR|IAD|LAX|MCI|MIA|ORD|PHX|PDX|SEA|SJC"}
   - {name: 🌐 全部节点, type: select, include-all: true}
 
 # 规则匹配
@@ -189,6 +196,7 @@ rules:
   - RULE-SET,private_ip,直连,no-resolve
   - RULE-SET,private_domain,直连
   - RULE-SET,zhilian,直连
+  - RULE-SET,steamcn_domain,🎯 直连
   #- RULE-SET,epic_domain,🎯 直连
   - RULE-SET,apple_domain,🍎 Apple
   - RULE-SET,daili,🚀 默认代理
@@ -209,11 +217,12 @@ rules:
   - RULE-SET,google_ip,🍀 Google,no-resolve
   - RULE-SET,netflix_ip,🎥 NETFLIX,no-resolve
   - RULE-SET,telegram_ip,📲 Telegram,no-resolve
+#  - RULE-SET,cloudflare_ip,🎯 直连,no-resolve
 #  - RULE-SET,lan_ip,🎯 直连,no-resolve
-  - RULE-SET,cn_companies,🎯 直连
+#  - RULE-SET,cn_companies,🎯 直连
   - RULE-SET,cn_domain,🎯 直连
   - RULE-SET,cn_ip,🎯 直连,no-resolve
-#  - RULE-SET,cloudflare_ip,🎯 直连,no-resolve
+
   - MATCH,🐟 漏网之鱼
 
 # 规则集
@@ -227,11 +236,13 @@ rule-providers:
   private_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/private.mrs"}
   #epic_domain: { <<: *domain, url: "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/epicgames.mrs"}
   daili: { <<: *domain, url: "https://orchidsd.github.io/yoki/post/daili.mrs"}
+  fakeipfilter: { <<: *domain, url: "https://orchidsd.github.io/yoki/post/fakeipfilter.mrs"}
   zhilian: { <<: *domain, url: "https://orchidsd.github.io/yoki/post/zhilian.mrs"}
   ai: {  <<: *domain, url: "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-ai-!cn.mrs" }
   youtube_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/youtube.mrs"}
   google_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/google.mrs"}
   github_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/github.mrs"}
+  steamcn_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/steam@cn.mrs"}
   telegram_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/telegram.mrs"}
   netflix_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/netflix.mrs"}
   paypal_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/paypal.mrs"}
@@ -247,7 +258,7 @@ rule-providers:
   
   private_ip: {<<: *ip, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/private.mrs"}
   cn_ip: { <<: *ip, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cn.mrs"}
-  #cloudflare_ip: { <<: *ip, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cloudflare.list"}
+#  cloudflare_ip: { <<: *ip, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cloudflare.mrs"}
   #lan_ip: { <<: *ip, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/private.mrs"}
   google_ip: { <<: *ip, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/google.mrs"}
   telegram_ip: { <<: *ip, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/telegram.mrs"}
